@@ -2,46 +2,54 @@ name := "preowned-kittens"
 
 organization := "com.lshoo"
 
-version := "1.0"
+version in ThisBuild := "1.0"
 
-scalaVersion := "2.11.7"
+scalaVersion in ThisBuild := "2.11.7"
 
-libraryDependencies ++= Seq (
-  "org.scalactic" %% "scalactic" % "2.2.6",
-  "org.scalatest" %% "scalatest" % "2.2.6" % "test"
-)
+
 
 val gitHeadCommitSha = taskKey[String] (
   "Determines the current git commit SHA"
   )
 
-gitHeadCommitSha := Process("git rev-parse HEAD").lines.head
+gitHeadCommitSha in ThisBuild := Process("git rev-parse HEAD").lines.head
 
 val makeVersionProperties = taskKey[Seq[File]] (
   "Makes a version.properties file."
 )
 
-makeVersionProperties := {
-  val propFile =
-    new File((resourceManaged in Compile).value, "version.properties")
-  val content = "version=%s" format (gitHeadCommitSha.value)
-  IO.write(propFile, content)
-  Seq(propFile)
-}
+def PreownedKittenProject(name: String): Project = (
+  Project(name, file(name))
+  settings(
+    libraryDependencies ++= Seq (
+      "org.scalactic" %% "scalactic" % "2.2.6",
+      "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+    )
+    )
+  )
 
-val taskA = taskKey[String]("taskA")
-val taskB = taskKey[String]("taskB")
-val taskC = taskKey[String]("taskC")
+lazy val common = (
+  PreownedKittenProject("common")
+  settings (
+    makeVersionProperties := {
+      val propFile =
+        (resourceManaged in Compile).value / "version.properties"
+      val content = "version=%s" format (gitHeadCommitSha.value)
+      IO.write(propFile, content)
+      Seq(propFile)
+    },
+    (resourceGenerators in Compile) <+= makeVersionProperties
+  )
+  )
 
-taskA := {
-  val b = taskB.value
-  val c = taskC.value
-  "TaskA"
-}
-taskB := {
-  //taskC.value
-  Thread.sleep(5000); "TaskB"
-}
-taskC := { Thread.sleep(5000); "TaskC" }
+lazy val analytics = (
+  PreownedKittenProject("analytics")
+  dependsOn(common)
+  settings()
+  )
 
-(resourceGenerators in Compile) <+= makeVersionProperties
+lazy val website = (
+  PreownedKittenProject("website")
+  dependsOn(common)
+  settings()
+  )
