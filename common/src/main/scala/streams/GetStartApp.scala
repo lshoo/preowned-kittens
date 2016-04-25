@@ -41,15 +41,15 @@ object GetStartApp extends  App {
     println(customer)
   }
 
-  /*inputSources.via(normalize).runWith(writeCustomer).andThen {
+  inputSources.via(normalize).runWith(writeCustomer).andThen {
     case _ =>
       system.shutdown()
       system.awaitTermination()
-  }*/
-  val out = inputSources via normalize to writeCustomer
+  }
+  /*val out = inputSources via normalize to writeCustomer
   out.run()
 
   val terminated = system.terminate()
-  Await.result(terminated, Duration.Inf)
+  Await.result(terminated, Duration.Inf)*/
 
 }

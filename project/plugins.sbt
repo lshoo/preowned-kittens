@@ -1,7 +1,9 @@
 // The Play plugin
-// addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.6")
+//addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.2")
 
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-aspectj" % "0.10.6")
 
 // web plugins
 
