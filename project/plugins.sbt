@@ -5,6 +5,8 @@ addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-aspectj" % "0.10.6")
 
+addSbtPlugin("io.kamon" % "aspectj-runner" % "0.1.3")
+
 // web plugins
 
 //addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0")

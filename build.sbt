@@ -12,7 +12,7 @@ scalaVersion in ThisBuild := "2.11.8"
 
 val akkaVersion = "2.4.4"
 
-val kamonVersion    = "0.6.0"
+val kamonVersion    = "0.6.1"
 
 val gitHeadCommitSha = taskKey[String] (
   "Determines the current git commit SHA"
@@ -37,14 +37,14 @@ def PreownedKittenProject(name: String): Project = (
       "com.typesafe.akka" %% "akka-stream" % akkaVersion,
       "ch.qos.logback" % "logback-classic" % "1.1.7",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
-      "io.kamon" %% "kamon-core" % kamonVersion,
+      "org.aspectj" % "aspectjweaver" % "1.8.9",
       "io.kamon" %% "kamon-core" % kamonVersion,
       "io.kamon" %% "kamon-scala" % kamonVersion,
       "io.kamon" %% "kamon-akka" % kamonVersion,
+      "io.kamon" %% "kamon-akka-remote_akka-2.4" % kamonVersion,
       "io.kamon" %% "kamon-statsd" % kamonVersion,
       "io.kamon" %% "kamon-log-reporter" % kamonVersion,
       "io.kamon" %% "kamon-system-metrics" % kamonVersion,
-      "org.aspectj" % "aspectjweaver" % "1.8.9",
       "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
       "com.typesafe.akka" %% "akka-multi-node-testkit" % akkaVersion,
         "org.scalactic" %% "scalactic" % "2.2.6",
@@ -81,6 +81,7 @@ lazy val website = (
 
 //configure aspectJ plugin to enable Kamon monitoring
 aspectjSettings
-javaOptions <++= AspectjKeys.weaverOptions in Aspectj
+
+javaOptions in run <++= AspectjKeys.weaverOptions in Aspectj
 
 fork in run := true
