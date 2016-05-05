@@ -67,6 +67,12 @@ lazy val common = (
   )
   )
 
+lazy val ddd = (
+  PreownedKittenProject("ddd")
+    dependsOn(common)
+    settings()
+  )
+
 lazy val analytics = (
   PreownedKittenProject("analytics")
   dependsOn(common)
