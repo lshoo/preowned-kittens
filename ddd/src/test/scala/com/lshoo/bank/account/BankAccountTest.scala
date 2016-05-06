@@ -127,4 +127,19 @@ class BankAccountTest extends FunSuite with BeforeAndAfterEach {
     val theBalance = testedBankAccount.balance
     assert(theBalance == 20.0)
   }
+
+  test("It should be possible to clone a bank account") {
+    val theAccountNumber = "123-456"
+    val theBalance = 876.54
+
+    testedBankAccount.accountNumber = theAccountNumber
+    testedBankAccount.balance = theBalance
+
+    val theBankAccountClone: BankAccount = testedBankAccount.clone()
+
+    assert(theBankAccountClone != null)
+    assert(theBankAccountClone.accountNumber == theAccountNumber)
+    assert(theBankAccountClone.balance == theBalance)
+    assert(theBankAccountClone ne testedBankAccount)
+  }
 }

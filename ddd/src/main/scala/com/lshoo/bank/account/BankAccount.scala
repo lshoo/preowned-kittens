@@ -3,7 +3,7 @@ package com.lshoo.bank.account
 /**
   * Represents an account in a bank.
   */
-class BankAccount {
+class BankAccount extends Cloneable {
 
   /* Fields: */
   var balance: BigDecimal = 0.0
@@ -28,5 +28,15 @@ class BankAccount {
   def deposit(inAmount: BigDecimal): Unit = {
     require(inAmount >= 0.0, "must deposit positive amounts")
     balance = balance + inAmount
+  }
+
+  /*
+   * Clones this bank account by performing a deep copy of it.
+   */
+  override def clone(): BankAccount = {
+    val theClone = new BankAccount()
+    theClone.accountNumber = accountNumber
+    theClone.balance = balance
+    theClone
   }
 }

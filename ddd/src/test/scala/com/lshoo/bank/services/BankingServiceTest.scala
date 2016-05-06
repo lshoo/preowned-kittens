@@ -2,6 +2,7 @@ package com.lshoo.bank.services
 
 import com.lshoo.bank.account.BankAccount
 import com.lshoo.bank.exceptions._
+import com.lshoo.bank.repositories.BankAccountRepository
 import org.scalatest.{BeforeAndAfterEach, FunSuite}
 
 /**
@@ -9,34 +10,34 @@ import org.scalatest.{BeforeAndAfterEach, FunSuite}
   * • It should be possible to create a new bank account with an account number that has not
 *previously been used.
  **
- • It should not be possible to create a bank account with an account number that previously
+ *• It should not be possible to create a bank account with an account number that previously
 *has been used.
  **
- • It should not be possible to create a bank account with an account number that is of illegal
+ *• It should not be possible to create a bank account with an account number that is of illegal
 *format.
 *For simplicity, we assume that all strings containing just digits and the “.” character are
 *valid account numbers.
  **
- • It should be possible to perform a balance inquiry on an existing bank account.
+ *• It should be possible to perform a balance inquiry on an existing bank account.
  **
- • It should not be possible to perform a balance inquiry using an account number for which
+ *• It should not be possible to perform a balance inquiry using an account number for which
 *there is no bank account.
  **
- • When money is deposited to a bank account, the account balance should increase
+ *• When money is deposited to a bank account, the account balance should increase
 *accordingly.
  **
- • It should not be possible to deposit money using an account number for which there is no
+ *• It should not be possible to deposit money using an account number for which there is no
 *bank account.
  **
- • When money is withdrawn from a bank account, the account balance should decrease
+ *• When money is withdrawn from a bank account, the account balance should decrease
 *accordingly.
  **
- • It should not be possible to withdraw money using an account number for which there is no
+ *• It should not be possible to withdraw money using an account number for which there is no
 *bank account.
  **
- • It should not be possible to overdraft a bank account.
+ *• It should not be possible to overdraft a bank account.
  **
- Again, note the tests that will cause an error condition in the system. These are included to define
+ *Again, note the tests that will cause an error condition in the system. These are included to define
 *the behaviour of the system under such circumstances.
   */
 /**
@@ -55,7 +56,7 @@ class BankingServiceTest extends FunSuite with BeforeAndAfterEach {
     bankingService = new BankingService()
 
     /* Clear the repository, as to leave no bank accounts from earlier tests. */
-    //BankAccountRepository.clear()
+    BankAccountRepository.clear()
 
     /* Create a new bank account that has not been registered. */
     newBankAccount = new BankAccount
