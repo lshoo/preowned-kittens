@@ -10,7 +10,7 @@ import scala.collection.mutable
   * The repository retains copies of bank accounts so any bank account supplied by a client may
   * be freely modified without affecting the contents of the repository.
   */
-object BankAccountRepository {
+class BankAccountRepository {
 
   private val accounts = mutable.Map.empty[String, BankAccount]
 
@@ -21,7 +21,7 @@ object BankAccountRepository {
     /*
      * Throws AssertionError if bank account with the same account number as the new bank account already exists.
      */
-    assume(accounts.contains(inNewBankAccount.accountNumber) == false,
+    assume(!accounts.contains(inNewBankAccount.accountNumber),
       s"a bank account with the account number ${inNewBankAccount.accountNumber} already exists.")
 
     val theNewBankAccount = inNewBankAccount.clone()
@@ -71,3 +71,5 @@ object BankAccountRepository {
 
   def clear(): Unit = accounts.clear()
 }
+
+// object BankAccountRepository extends BankAccountRepository
