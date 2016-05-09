@@ -72,16 +72,15 @@ class BankingServiceTest extends FunSuite with BeforeAndAfterEach {
   /* Fields: */
   protected var bankingService: BankingService = null
   protected var newBankAccount: BankAccount = null
-  protected var bankingRepository: BankAccountRepository = null
 
   override def beforeEach(): Unit = {
 
     /* Clear the repository, as to leave no bank accounts from earlier tests. */
-    bankingRepository = new BankAccountRepository()
+    val bankingRepository = new BankAccountRepository()
 
     val exchangeRateService = createExchangeRateService()
 
-    bankingService = new BankingService(bankingRepository)
+    bankingService = new BankingService(bankingRepository) with BankingServiceExceptionTranslation
     bankingService.exchangeRateService = exchangeRateService
 
     /* Create a new bank account that has not been registered. */

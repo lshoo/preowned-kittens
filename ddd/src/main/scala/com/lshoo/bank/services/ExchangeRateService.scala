@@ -2,6 +2,7 @@ package com.lshoo.bank.services
 
 import java.util.Currency
 
+import com.lshoo.bank.exceptions.NoExchangeRateRegistered
 import com.lshoo.bank.money.Money
 
 import scala.collection.mutable
@@ -33,14 +34,20 @@ class ExchangeRateService {
 
   /**
     *
-    * @param inMoney
-    * @param toCurrency
+    * @param inAmount
+    * @param inToCurrency
     * @return
     */
-  def exchange(inMoney: Money, toCurrency: Currency): Option[Money] = {
-    if (inMoney.currency == toCurrency) Some(inMoney)
-    else exchangeRates.get((inMoney.currency, toCurrency)).map { rates =>
-      new Money(rates.head * inMoney.amount, toCurrency)
+  def exchange(inAmount: Money, inToCurrency: Currency): Option[Money] = {
+
+    if (inAmount.currency == inToCurrency)
+      Some(inAmount)
+    /*else if (theExchangeRateOption.isEmpty)
+      throw new NoExchangeRateRegistered(
+        "No exchange rate registered for exchange from " + inAmount.currency + " to " + inToCurrency
+      )*/
+    else exchangeRates.get((inAmount.currency, inToCurrency)).map { rates =>
+      new Money(rates.head * inAmount.amount, inToCurrency)
     }
   }
 
