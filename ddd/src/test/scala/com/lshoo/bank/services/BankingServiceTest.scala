@@ -7,6 +7,7 @@ import com.lshoo.bank.exceptions._
 import com.lshoo.bank.money.Money
 import com.lshoo.bank.repositories.BankAccountRepository
 import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import BankingTestConstants._
 
 /**
   * I come up with the following list:
@@ -47,27 +48,7 @@ import org.scalatest.{BeforeAndAfterEach, FunSuite}
   * Tests the <code>BankingService</code> class.
   */
 class BankingServiceTest extends FunSuite with BeforeAndAfterEach {
-  /* Constant(s): */
-  val BANK_ACCOUNT_NUMBER = "123.123"
-  val BANK_ACCOUNT_NUMBER_BAD_FORMAT = "123-123"
 
-  protected val CURRENCY_TWD = Currency.getInstance("TWD")
-  protected val CURRENCY_SEK = Currency.getInstance("SEK")
-  protected val CURRENCY_USD_NOT_REGISTERED = Currency.getInstance("USD")
-
-  protected val EXCHANGE_RATE_SEK_TWD: BigDecimal = 4.0
-  protected val EXCHANGE_RATE_TWD_SEK: BigDecimal = 5.0
-
-  protected val MONEY_200_TWD = new Money(200.0, CURRENCY_TWD)
-  protected val MONEY_100_3_TWD = new Money(100.3, CURRENCY_TWD)
-  protected val MONEY_50_1_TWD = new Money(50.1, CURRENCY_TWD)
-  protected val MONEY_50_2_TWD = new Money(50.2, CURRENCY_TWD)
-  protected val MONEY_0_TWD = new Money(0.0, CURRENCY_TWD)
-
-  protected val MONEY_10_SEK = new Money(10.0, CURRENCY_SEK)
-  protected val MONEY_40_TWD = new Money(40.0, CURRENCY_TWD)
-  protected val MONEY_160_TWD = new Money(160.0, CURRENCY_TWD)
-  protected val MONEY_10_USD_NOT_REGISTERED = new Money(10.0, CURRENCY_USD_NOT_REGISTERED)
 
   /* Fields: */
   protected var bankingService: BankingService = null

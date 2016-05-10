@@ -2,6 +2,7 @@ package com.lshoo.bank.factories
 
 import com.lshoo.bank.account.BankAccount
 import com.lshoo.bank.services.BankingServiceTest
+import com.lshoo.bank.services.BankingTestConstants._
 
 /**
   * Tests an instance of the banking service, as created by the <code>BankingServiceFactory</code> factory.
