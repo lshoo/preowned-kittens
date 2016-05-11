@@ -29,4 +29,6 @@ trait BankingServiceMixinInterface {
 
   protected def exchangeMoney(inAmount: Money, inToCurrency: Currency): Option[Money]
 
+  def transfer(inFromBankAccountNumber: String, inToBankAccountNumber: String, inAmount: Money): Unit
+
 }

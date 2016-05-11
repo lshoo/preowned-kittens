@@ -269,4 +269,14 @@ class BankingService(repository: BankAccountRepository) extends BankingServiceMi
   protected def exchangeMoney(inAmount: Money, inToCurrency: Currency): Option[Money] = {
     exchangeRateService.exchange(inAmount, inToCurrency)
   }
+
+  def transfer(inFromBankAccountNumber: String, inToBankAccountNumber: String, inAmount: Money): Unit = {
+
+    val theFromBankAccount = repository.findBankAccountWithAccountNumber(inFromBankAccountNumber).get
+    val theToBankAccount = repository.findBankAccountWithAccountNumber(inToBankAccountNumber).get
+    theFromBankAccount.withdraw(inAmount)
+    theToBankAccount.deposit(inAmount)
+    repository.update(theFromBankAccount)
+    repository.update(theToBankAccount)
+  }
 }

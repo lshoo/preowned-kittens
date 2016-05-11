@@ -3,7 +3,7 @@ package com.lshoo.bank.services
 import java.util.Date
 
 import com.lshoo.bank.account.BankAccount
-import com.lshoo.bank.repositories.BankAccountRepository
+import com.lshoo.bank.repositories.{BankAccountRepository, TransactionHistoryRepository}
 import BankingTestConstants._
 import com.lshoo.bank.money.Money
 import com.lshoo.bank.transactions._
@@ -20,7 +20,7 @@ class TransactionHistoryServiceTest extends FunSuite with BeforeAndAfterEach {
   protected var transactionHistoryService: TransactionHistoryService = null
 
   override def beforeEach(): Unit = {
-    transactionHistoryService = new TransactionHistoryService()
+    transactionHistoryService = new TransactionHistoryService(new TransactionHistoryRepository())
     val bankingRepository = new BankAccountRepository()
     bankingService = new BankingService(bankingRepository) with TransactionHistoryRecorder
 
@@ -138,7 +138,7 @@ class TransactionHistoryServiceTest extends FunSuite with BeforeAndAfterEach {
     changeExchangeRates()
 
     val theTransactionHistory: Seq[TransactionHistoryEntry] =
-      transactionHistoryService.retrieveTranasactionHistory(BANK_ACCOUNT_NUMBER)
+      transactionHistoryService.retrieveTransactionHistory(BANK_ACCOUNT_NUMBER)
 
     assert(theTransactionHistory.size == 2)
 
@@ -161,7 +161,7 @@ class TransactionHistoryServiceTest extends FunSuite with BeforeAndAfterEach {
     bankingService.withdraw(BANK_ACCOUNT_NUMBER, MONEY_160_TWD)
 
     val theTransactionHistory: Seq[TransactionHistoryEntry] =
-      transactionHistoryService.retrieveTranasactionHistory(BANK_ACCOUNT_NUMBER)
+      transactionHistoryService.retrieveTransactionHistory(BANK_ACCOUNT_NUMBER)
     assert(theTransactionHistory.size == 3)
 
     val theTransactionHistoryEntry = theTransactionHistory.head
@@ -187,11 +187,12 @@ class TransactionHistoryServiceTest extends FunSuite with BeforeAndAfterEach {
       BankingTestConstants.BANK_ACCOUNT_NUMBER,
       BankingTestConstants.MONEY_10_SEK)
     changeExchangeRates()
-    val theTransactionHistory: List[TransactionHistoryEntry] =
+    val theTransactionHistory: Seq[TransactionHistoryEntry] =
       transactionHistoryService.retrieveTransactionHistory(
         BankingTestConstants.BANK_ACCOUNT_NUMBER)
     assert(theTransactionHistory.size == 3)
-    val theTransactionHistoryEntry = theTransactionHistory.last
+    println(theTransactionHistory)
+    val theTransactionHistoryEntry = theTransactionHistory.head
     theTransactionHistoryEntry match {
       case theWithdrawalEntry: ForeignCurrencyWithdrawalTransactionEntry =>
         assert(theWithdrawalEntry.amount == BankingTestConstants.MONEY_40_TWD)
@@ -244,7 +245,7 @@ class TransactionHistoryServiceTest extends FunSuite with BeforeAndAfterEach {
     val isNotAfter = (theFirstDate: Date, theSecondDate: Date) =>
       !theFirstDate.after(theSecondDate)
 
-    theTransactionHistory.foreach {
+      theTransactionHistory.foreach {
       theEntry =>
         /*
         * The time of this transaction history entry should be
@@ -262,7 +263,7 @@ class TransactionHistoryServiceTest extends FunSuite with BeforeAndAfterEach {
           * The previous entry should have happened later, or at
           * the same time, as this entry.
           */
-          assert(isNotAfter(thePreviousEntry.timestamp, theEntry.timestamp))
+          assert(isNotAfter(theEntry.timestamp, thePreviousEntry.timestamp))
         }
         thePreviousEntry = theEntry
     }
@@ -281,7 +282,7 @@ class TransactionHistoryServiceTest extends FunSuite with BeforeAndAfterEach {
       case _ : Throwable =>
       /* Do nothing. */
     }
-    val theTransactionHistory : List[TransactionHistoryEntry] =
+    val theTransactionHistory : Seq[TransactionHistoryEntry] =
       transactionHistoryService.retrieveTransactionHistory(
         BankingTestConstants.BANK_ACCOUNT_NUMBER)
     assert(theTransactionHistory.size == 1)

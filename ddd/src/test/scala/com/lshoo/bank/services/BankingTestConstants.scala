@@ -10,6 +10,7 @@ import com.lshoo.bank.money.Money
 object BankingTestConstants {
   /* Constant(s): */
   val BANK_ACCOUNT_NUMBER = "123.123"
+  val BANK_ACCOUNT_NUMBER_2 = "234.234"
   val BANK_ACCOUNT_NUMBER_BAD_FORMAT = "123-123"
 
   val CURRENCY_TWD = Currency.getInstance("TWD")

@@ -53,6 +53,7 @@ class BankingServiceTest extends FunSuite with BeforeAndAfterEach {
   /* Fields: */
   protected var bankingService: BankingService = null
   protected var newBankAccount: BankAccount = null
+  protected var otherBandAccount: BankAccount = null
 
   override def beforeEach(): Unit = {
 
@@ -67,6 +68,8 @@ class BankingServiceTest extends FunSuite with BeforeAndAfterEach {
     /* Create a new bank account that has not been registered. */
     newBankAccount = new BankAccount(CURRENCY_TWD)
     newBankAccount.accountNumber = BANK_ACCOUNT_NUMBER
+    otherBandAccount = new BankAccount(CURRENCY_TWD)
+    otherBandAccount.accountNumber = BANK_ACCOUNT_NUMBER_2
   }
 
   private def createExchangeRateService(): ExchangeRateService = {
@@ -208,5 +211,42 @@ class BankingServiceTest extends FunSuite with BeforeAndAfterEach {
     }
     val theBalance = bankingService.balance(BANK_ACCOUNT_NUMBER)
     assert(theBalance == MONEY_200_TWD)
+  }
+
+  test("It should be possible to transfer money from a bank account to another account") {
+    bankingService.registerBankAccount(newBankAccount)
+    bankingService.registerBankAccount(otherBandAccount)
+    bankingService.deposit(BANK_ACCOUNT_NUMBER, MONEY_200_TWD)
+    bankingService.transfer(BANK_ACCOUNT_NUMBER, BANK_ACCOUNT_NUMBER_2, MONEY_160_TWD)
+
+    val fromBalance = bankingService.balance(BANK_ACCOUNT_NUMBER)
+    assert(fromBalance == MONEY_40_TWD)
+    val toBalance = bankingService.balance(BANK_ACCOUNT_NUMBER_2)
+    assert(toBalance == MONEY_160_TWD)
+  }
+
+  test("It should not possible to transfer money from a bank account to the same account") {
+    bankingService.registerBankAccount(newBankAccount)
+    bankingService.deposit(BANK_ACCOUNT_NUMBER, MONEY_200_TWD)
+    intercept[IllegalArgumentException] {
+      bankingService.transfer(BANK_ACCOUNT_NUMBER, BANK_ACCOUNT_NUMBER,
+        MONEY_160_TWD)
+    }
+
+    val theBalance = bankingService.balance(BANK_ACCOUNT_NUMBER)
+    assert(theBalance == MONEY_200_TWD)
+  }
+
+  test("It should not possible to transfer more than the balance money in their account") {
+    bankingService.registerBankAccount(newBankAccount)
+    bankingService.registerBankAccount(otherBandAccount)
+    bankingService.deposit(BANK_ACCOUNT_NUMBER, MONEY_160_TWD)
+    intercept[BankAccountOverdraft] {
+      bankingService.transfer(BANK_ACCOUNT_NUMBER, BANK_ACCOUNT_NUMBER_2,
+        MONEY_200_TWD)
+    }
+
+    val theBalance = bankingService.balance(BANK_ACCOUNT_NUMBER)
+    assert(theBalance == MONEY_160_TWD)
   }
 }

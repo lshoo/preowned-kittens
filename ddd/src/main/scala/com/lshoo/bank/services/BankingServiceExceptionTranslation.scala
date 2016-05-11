@@ -165,4 +165,34 @@ trait BankingServiceExceptionTranslation extends BankingServiceMixinInterface {
         throw theException
     }
   }
+
+  abstract override def transfer(inFromBankAccountNumber: String, inToBankAccountNumber: String, inAmount: Money): Unit = {
+    if (inFromBankAccountNumber == inToBankAccountNumber)
+      throw new IllegalArgumentException("Cannot transfer money to the same account")
+
+    try {
+      super.transfer(inFromBankAccountNumber, inToBankAccountNumber, inAmount)
+    } catch {
+      /* Attempted to overdraft bank account. */
+      case _: AssertionError =>
+        throw new BankAccountOverdraft(
+          "Bank account: " + inFromBankAccountNumber + ", amount: " + inAmount
+        )
+      /* Propagate exception indicating bad parameter(s). */
+      case theException: IllegalArgumentException =>
+        throw theException
+
+      /* Propagate exception indicating bank account not found. */
+      case theException: BankAccountNotFound =>
+        throw theException
+
+      /* Propagate exception indicating no exchange rate registered. */
+      case theException: NoExchangeRateRegistered =>
+        throw theException
+
+      /* Wrap unexpected exceptions. */
+      case theException: Throwable =>
+        throw new Error("Failed to register new bank account.", theException)
+    }
+  }
 }

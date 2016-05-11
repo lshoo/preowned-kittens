@@ -25,5 +25,7 @@ class BankingServiceFactoryTest extends BankingServiceTest {
 
     newBankAccount = new BankAccount(CURRENCY_TWD)
     newBankAccount.accountNumber = BANK_ACCOUNT_NUMBER
+    otherBandAccount = new BankAccount(CURRENCY_TWD)
+    otherBandAccount.accountNumber = BANK_ACCOUNT_NUMBER_2
   }
 }
