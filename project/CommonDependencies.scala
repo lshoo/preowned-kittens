@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object CommonDependencies {
 
-  val akkaVersion = "2.4.4"
+  val akkaVersion = "2.4.6"
 
   val kamonVersion    = "0.6.1"
 
@@ -19,6 +19,7 @@ object CommonDependencies {
       "com.typesafe.akka" %% "akka-stream" % akkaVersion,
       "ch.qos.logback" % "logback-classic" % "1.1.7",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0",
+      "org.typelevel" %% "cats" % "0.6.0",
       "org.aspectj" % "aspectjweaver" % "1.8.9",
       "io.kamon" %% "kamon-core" % kamonVersion,
       "io.kamon" %% "kamon-scala" % kamonVersion,
