@@ -10,7 +10,7 @@ version in ThisBuild := "1.0"
 scalaVersion in ThisBuild := "2.11.8"
 
 
-val akkaVersion = "2.4.4"
+val akkaVersion = "2.4.6"
 
 val kamonVersion    = "0.6.1"
 
@@ -45,6 +45,12 @@ lazy val common = (
 
 lazy val ddd = (
   PreownedKittenProject("ddd")
+    dependsOn(common)
+    settings()
+  )
+
+lazy val kafka = (
+  PreownedKittenProject("kafka")
     dependsOn(common)
     settings()
   )
