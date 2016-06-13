@@ -1,6 +1,5 @@
 package example
 
-import kafka.example.KafkaConfig
 import org.scalatest.FunSuite
 
 class KafkaConfigSpec extends FunSuite {

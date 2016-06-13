@@ -10,8 +10,6 @@ version in ThisBuild := "1.0"
 scalaVersion in ThisBuild := "2.11.8"
 
 
-val akkaVersion = "2.4.6"
-
 val kamonVersion    = "0.6.1"
 
 val gitHeadCommitSha = taskKey[String] (
